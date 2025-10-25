@@ -1,6 +1,6 @@
 name: Spec Sync Guard (Autocalc)
 on:
-  push: { branches: [ main ] }
+  push: { branches: [ main, setup/spec-sync ] }
   pull_request: { branches: [ main ] }
 jobs:
   guard:

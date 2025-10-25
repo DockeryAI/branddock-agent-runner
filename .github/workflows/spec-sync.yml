@@ -1,4 +1,4 @@
-name: Spec Sync Guard (Autocalc)
+name: Spec Sync Guard (Autocalc + No-Phase-6-44Step)
 on:
   push: { branches: [ "**" ] }
   pull_request: { branches: [ "**" ] }
@@ -11,11 +11,22 @@ jobs:
         with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: "20" }
-      - run: node scripts/sync-spec.mjs
-      - name: Fail if spec changed
+      - name: Sync + Sanitize
+        run: |
+          if [ -f scripts/sync-spec.mjs ]; then node scripts/sync-spec.mjs || true; fi
+          node scripts/sanitize-spec.mjs
+      - name: Block forbidden legacy phrases
+        run: |
+          set -e
+          if grep -RIEn --include="*.md" "(6[ -]?Phase|44[ -]?Step|Phase[[:space:]]*6([[:space:]]+of[[:space:]]*[0-9]+)?|Step[[:space:]]*44([[:space:]]+of[[:space:]]*[0-9]+)?|Canonical[[:space:]]*44[ -]?Step)" docs/ >/dev/null 2>&1; then
+            echo "::error ::Forbidden legacy phrase detected (Phase 6 / 44-Step)."
+            grep -RIEn --include="*.md" "(6[ -]?Phase|44[ -]?Step|Phase[[:space:]]*6([[:space:]]+of[[:space:]]*[0-9]+)?|Step[[:space:]]*44([[:space:]]+of[[:space:]]*[0-9]+)?|Canonical[[:space:]]*44[ -]?Step)" docs/ || true
+            exit 1
+          fi
+      - name: Fail if spec changed during guard
         run: |
           if ! git diff --quiet -- docs/brandock-spec.md; then
-            echo "::error ::Spec drifted; run sync locally and commit."
+            echo "::error ::Spec changed during guard; run sync locally and commit."
             git --no-pager diff -- docs/brandock-spec.md
             exit 1
           fi

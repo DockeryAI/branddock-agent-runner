@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -euo pipefail
-node scripts/sync-spec.mjs
-git add docs/brandock-spec.md .runner/status.json 2>/dev/null || true
+scripts/sync-and-sanitize.sh
+git add docs/brandock-spec.md docs/.backups .runner/status.json 2>/dev/null || true

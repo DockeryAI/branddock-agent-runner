@@ -1,0 +1,78 @@
+{
+  "project": "branddock-agent-runner",
+  "version": "1.0.0",
+  "status": "template_ready",
+  "last_updated": "2025-11-02T13:35:00Z",
+  "description": "Build Runner 3.0 template project providing governance infrastructure, spec synchronization, and feature tracking scaffolding. Designed as a starting point for projects built under Build Runner framework.",
+
+  "features": [
+    {
+      "id": "spec-sync-system",
+      "name": "Spec Synchronization System",
+      "status": "complete",
+      "version": "1.0.0",
+      "description": "Automated spec synchronization with execution tracking and weighted completion scoring. Injects SYNC:EXECUTION and SYNC:V1_BASELINE blocks into project specs.",
+      "components": ["scripts/sync-spec.mjs", ".husky/pre-commit"],
+      "priority": "high",
+      "tests": "integrated_via_ci",
+      "docs": ["docs/brandock-spec.md", ".runner/governance/primer.md"]
+    },
+    {
+      "id": "status-generation",
+      "name": "Status Report Generation",
+      "status": "complete",
+      "version": "1.0.0",
+      "description": "Automated generation of STATUS.md from features.json with completion tracking, feature breakdown, and tech stack overview.",
+      "components": [".buildrunner/scripts/generate-status.js"],
+      "priority": "high",
+      "tests": "working",
+      "docs": [".buildrunner/STATUS.md"]
+    },
+    {
+      "id": "ci-cd-workflows",
+      "name": "GitHub Actions CI/CD Integration",
+      "status": "complete",
+      "version": "1.0.0",
+      "description": "Build verification and spec sync guard workflows for pull requests and main branch. Ensures specs stay in sync with execution state.",
+      "components": [".github/workflows/ci.yml", ".github/workflows/spec-sync.yml", "check.sh"],
+      "priority": "high",
+      "tests": "working",
+      "docs": []
+    },
+    {
+      "id": "governance-framework",
+      "name": "Build Runner Governance Framework",
+      "status": "complete",
+      "version": "3.0.0",
+      "description": "Execution state tracking, auto-totals calculation, and development governance rules. Provides one-command-at-a-time workflow with POSIX safety.",
+      "components": [".runner/state.json", ".runner/governance/primer.md", ".runner/status.json", ".runner/gpt/chatgpt-governance.yaml"],
+      "priority": "critical",
+      "tests": "integrated",
+      "docs": [".runner/governance/primer.md", ".buildrunner/standards/CODING_STANDARDS.md"]
+    }
+  ],
+
+  "planned_features": [],
+
+  "metrics": {
+    "features_complete": 4,
+    "features_in_progress": 0,
+    "features_planned": 0,
+    "completion_percentage": 100,
+    "components_count": 9,
+    "api_endpoints_count": 0,
+    "javascript_files": 2,
+    "typescript_files": 0,
+    "python_files": 0,
+    "shell_scripts": 2,
+    "documentation_files": 5,
+    "total_commits": 6
+  },
+
+  "tech_stack": {
+    "languages": ["JavaScript/Node.js", "Bash", "YAML"],
+    "frameworks": ["Node.js 20"],
+    "infrastructure": ["GitHub Actions", "Husky", "Build Runner 3.0"],
+    "tools": ["Git", "jq", "npm", "Claude Code"]
+  }
+}
